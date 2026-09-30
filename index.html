@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="When Guardrails Fail: Multilingual Long-Context Safety in Tool-Using Agents. NeurIPS 2026, Long-Context Foundation Models (LCFM)." />
+  <title>When Guardrails Fail | NeurIPS 2026 LCFM</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="hero" id="top">
+    <nav class="nav container" aria-label="Primary navigation">
+      <a class="brand" href="#top">When Guardrails Fail</a>
+      <div class="nav-links">
+        <a href="#abstract">Abstract</a>
+        <a href="#framework">Framework</a>
+        <a href="#results">Results</a>
+        <a href="#bibtex">BibTeX</a>
+      </div>
+    </nav>
+
+    <div class="hero-inner container">
+      <div class="venue-chip">NeurIPS 2026 · Long-Context Foundation Models (LCFM)</div>
+      <h1>When Guardrails Fail:<br /><span>Multilingual Long-Context Safety in Tool-Using Agents</span></h1>
+
+      <div class="authors">
+        <span>Md Jahangir Alam<sup>1</sup></span>
+        <span>Ismail Hossain<sup>1</sup></span>
+        <span>Tanzim Ahad<sup>1</sup></span>
+        <span>Sai Puppala<sup>2</sup></span>
+        <span>Sajedul Talukder<sup>1</sup></span>
+      </div>
+
+      <div class="affiliations">
+        <div><sup>1</sup> Department of Computer Science, University of Texas at El Paso</div>
+        <div><sup>2</sup> New Mexico Institute of Mining &amp; Technology</div>
+      </div>
+
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="https://openreview.net/forum?id=lbBivgE96k" target="_blank" rel="noopener">OpenReview</a>
+        <a class="btn" href="https://openreview.net/pdf?id=lbBivgE96k" target="_blank" rel="noopener">Paper PDF</a>
+      </div>
+
+      <p class="hero-thesis">Safety in tool-using agents is not a fixed model property. It depends jointly on the guardrail, language, context length, prompt position, and downstream agent.</p>
+    </div>
+  </header>
+
+  <main>
+    <section class="stats-strip" aria-label="Study statistics">
+      <div class="container stats-grid">
+        <div class="stat"><strong>98</strong><span>Languages</span></div>
+        <div class="stat"><strong>19</strong><span>Harm Categories</span></div>
+        <div class="stat"><strong>5</strong><span>Runtime Guards</span></div>
+        <div class="stat"><strong>2</strong><span>Tool-Using Agents</span></div>
+        <div class="stat"><strong>8K / 32K</strong><span>Context Lengths</span></div>
+        <div class="stat"><strong>186K+</strong><span>Multilingual Instances</span></div>
+      </div>
+    </section>
+
+    <section class="section container" id="abstract">
+      <div class="section-heading">
+        <span class="eyebrow">Overview</span>
+        <h2>Abstract</h2>
+      </div>
+      <div class="prose-card">
+        <p>
+          Safety guardrails are increasingly placed in front of language-model agents, yet they are often evaluated as isolated text classifiers. We present a multilingual guard-to-agent safety evaluation framework that measures whether guardrail bypasses propagate into downstream restricted-tool selection under short and long context. Starting from 1,901 unsafe English prompts derived from AEGIS2.0, we construct parallel prompts across 98 languages, yielding up to 186,298 instances spanning 19 harm categories. We evaluate five runtime guards and two downstream agents, Llama-3.1-8B-Instruct and Qwen2.5-14B-Instruct, using inert restricted tools. On the 3,190-prompt AprielGuard reference set, we further test 8K and 32K contexts with harmful requests placed at the beginning, middle, or end.
+        </p>
+        <p>
+          Results show strong model-position interactions, safety-state changes as context expands, and pronounced multilingual disparities. The findings show that multilingual agent safety is compositional and should be evaluated across the complete guard-to-action pipeline.
+        </p>
+      </div>
+    </section>
+
+    <section class="section section-alt" id="framework">
+      <div class="container">
+        <div class="section-heading">
+          <span class="eyebrow">Method</span>
+          <h2>Guard-to-Agent Safety Evaluation</h2>
+          <p>We follow harmful multilingual prompts from the guardrail decision all the way to a downstream action boundary.</p>
+        </div>
+
+        <figure class="figure-card figure-wide">
+          <img src="assets/framework.png" alt="Overview of the multilingual guard-to-agent safety evaluation framework" loading="lazy" />
+          <figcaption>
+            <strong>Framework.</strong> Unsafe prompts are translated across 98 languages, evaluated by runtime guardrails, and then forwarded to tool-using agents under controlled long-context conditions. The downstream agent can refuse, escalate, or select an inert restricted tool.
+          </figcaption>
+        </figure>
+
+        <div class="steps-grid">
+          <article class="step-card"><span>01</span><h3>Multilingual benchmark</h3><p>1,901 unsafe English roots are translated into 98 languages, with language-resource and translation-quality metadata retained for analysis.</p></article>
+          <article class="step-card"><span>02</span><h3>Runtime guardrails</h3><p>Five safety guards are evaluated independently. Harmful prompts classified as safe are treated as guardrail bypasses.</p></article>
+          <article class="step-card"><span>03</span><h3>Tool-using agents</h3><p>Guard-admitted prompts are passed to Llama-3.1-8B-Instruct and Qwen2.5-14B-Instruct with inert, category-relevant restricted tools.</p></article>
+          <article class="step-card"><span>04</span><h3>Long-context stress</h3><p>The same harmful request is placed at the beginning, middle, or end of 8K and 32K contexts, enabling matched comparisons.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section container" id="results">
+      <div class="section-heading">
+        <span class="eyebrow">Main Findings</span>
+        <h2>Safety Depends on Context, Position, Model, and Language</h2>
+      </div>
+
+      <div class="finding-grid">
+        <article class="finding-card">
+          <div class="finding-number">01</div>
+          <h3>Longer context does not have a uniform safety effect</h3>
+          <p>For Qwen at the beginning position, restricted-tool selection rises from <strong>28.53%</strong> at 8K to <strong>35.24%</strong> at 32K. For Llama in the same position, it falls from <strong>10.97%</strong> to <strong>0.72%</strong>.</p>
+        </article>
+        <article class="finding-card">
+          <div class="finding-number">02</div>
+          <h3>Prompt position can reverse relative model safety</h3>
+          <p>Llama is substantially safer at beginning positions, while Qwen is safer at the end. Safety rankings therefore depend on where the harmful request appears.</p>
+        </article>
+        <article class="finding-card">
+          <div class="finding-number">03</div>
+          <h3>Individual prompts can change safety state</h3>
+          <p>Across matched cases, <strong>6.4%</strong> move from safe at 8K to unsafe at 32K, while <strong>5.5%</strong> move in the opposite direction.</p>
+        </article>
+        <article class="finding-card">
+          <div class="finding-number">04</div>
+          <h3>Low-resource languages face higher downstream risk</h3>
+          <p>Restricted-tool selection reaches <strong>21.65%</strong> for low-resource languages versus <strong>11.08%</strong> and <strong>10.66%</strong> for high- and medium-resource languages.</p>
+        </article>
+      </div>
+
+      <div class="results-gallery">
+        <figure class="figure-card">
+          <img src="assets/context_heatmap.png" alt="Restricted-tool selection across agent, context length, and prompt position" loading="lazy" />
+          <figcaption><strong>Model × context × position.</strong> The same long-context condition can have opposite effects across agents.</figcaption>
+        </figure>
+
+        <figure class="figure-card">
+          <img src="assets/safety_transitions.png" alt="Safety-state transitions from 8K to 32K" loading="lazy" />
+          <figcaption><strong>Safety-state transitions.</strong> Aggregate averages hide prompt-level changes when context expands.</figcaption>
+        </figure>
+
+        <figure class="figure-card gallery-span-2">
+          <img src="assets/multilingual_risk.png" alt="Cross-lingual downstream risk across languages" loading="lazy" />
+          <figcaption><strong>Cross-lingual risk.</strong> The 98-language analysis reveals substantial heterogeneity in downstream restricted-tool selection.</figcaption>
+        </figure>
+
+        <figure class="figure-card gallery-span-2">
+          <img src="assets/harm_categories.png" alt="Restricted-tool selection by harm category and downstream agent" loading="lazy" />
+          <figcaption><strong>Harm-category variation.</strong> Relative model behavior also changes across semantic risk categories.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section section-alt" id="implications">
+      <div class="container implication-wrap">
+        <div class="section-heading compact">
+          <span class="eyebrow">Why It Matters</span>
+          <h2>Evaluate the Entire Guard-to-Action Pipeline</h2>
+        </div>
+        <div class="implication-card">
+          <p class="lead">A guardrail can fail without producing an unsafe action, and a downstream agent can recover from an upstream classification error. But that recovery is highly context dependent.</p>
+          <p>For agentic systems, text-classification accuracy alone is not enough. Safety evaluation should jointly consider the guard model, downstream agent, context structure, prompt position, language, harm category, and action space.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section container" id="more-results">
+      <div class="section-heading">
+        <span class="eyebrow">Additional Analysis</span>
+        <h2>Paired Long-Context Effects</h2>
+      </div>
+      <div class="results-gallery">
+        <figure class="figure-card">
+          <img src="assets/context_effect.png" alt="Paired effect of increasing context from 8K to 32K" loading="lazy" />
+          <figcaption><strong>Context-length effect.</strong> Positive values indicate higher restricted-tool selection at 32K.</figcaption>
+        </figure>
+        <figure class="figure-card">
+          <img src="assets/agent_comparison.png" alt="Paired downstream-agent comparison" loading="lazy" />
+          <figcaption><strong>Agent comparison.</strong> Relative safety changes with context position, so no single agent is uniformly safer across conditions.</figcaption>
+        </figure>
+        <figure class="figure-card gallery-span-2">
+          <img src="assets/position_effect.png" alt="Paired effect of harmful-prompt position" loading="lazy" />
+          <figcaption><strong>Prompt-position effect.</strong> Moving the same harmful request within the context produces strong model-specific changes.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section section-alt" id="limitations">
+      <div class="container">
+        <div class="section-heading">
+          <span class="eyebrow">Scope</span>
+          <h2>Limitations</h2>
+        </div>
+        <div class="limitations-grid">
+          <div class="mini-card"><h3>Translation-based benchmark</h3><p>The multilingual benchmark is primarily machine translated, so semantic scores do not guarantee native fluency or culturally equivalent intent.</p></div>
+          <div class="mini-card"><h3>Controlled long context</h3><p>The surrounding long context is benign and English-language rather than realistic retrieved documents, tool outputs, code, or adversarial histories.</p></div>
+          <div class="mini-card"><h3>Model coverage</h3><p>The downstream study evaluates two agents, two context lengths, and three prompt positions, so observed effects may not generalize universally.</p></div>
+          <div class="mini-card"><h3>Symbolic tools</h3><p>Restricted tools are inert. The study measures attempted unsafe action rather than real-world execution.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section container" id="bibtex">
+      <div class="section-heading">
+        <span class="eyebrow">Citation</span>
+        <h2>BibTeX</h2>
+      </div>
+      <div class="bibtex-card">
+        <button class="copy-btn" id="copyBib" type="button">Copy</button>
+        <pre id="bibtexText"><code>@inproceedings{alam2026guardrails,
+  title     = {When Guardrails Fail: Multilingual Long-Context Safety in Tool-Using Agents},
+  author    = {Alam, Md Jahangir and Hossain, Ismail and Ahad, Tanzim and Puppala, Sai and Talukder, Sajedul},
+  booktitle = {NeurIPS 2026, Long-Context Foundation Models (LCFM)},
+  year      = {2026},
+  url       = {https://openreview.net/forum?id=lbBivgE96k}
+}</code></pre>
+      </div>
+      <p class="citation-note">Update the BibTeX fields if the workshop publishes an official archival citation or proceedings entry.</p>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <div>
+        <strong>When Guardrails Fail</strong>
+        <p>NeurIPS 2026 · Long-Context Foundation Models (LCFM)</p>
+      </div>
+      <a href="#top">Back to top ↑</a>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
